@@ -218,15 +218,22 @@
     await requestAIMove();
   }
 
-  // Engine backend: Flask /api/move when available, Pyodide Web Worker on GitHub Pages
-  let useWorker = window.location.hostname.endsWith("github.io");
+  // Engine backend: Flask /api/move when running locally, Pyodide Web Worker on static hosts (GitHub Pages / custom domain)
+  const isLocalHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+  let useWorker = !isLocalHost;
   let worker = null;
   let workerMsgId = 0;
   const workerPending = new Map();
 
   function getBaseUrl() {
-    const href = window.location.href.split("#")[0].split("?")[0];
-    return href.endsWith("/") ? href : href.substring(0, href.lastIndexOf("/") + 1);
+    const url = new URL(window.location.href);
+    let path = url.pathname;
+    if (!path.endsWith("/") && !path.split("/").pop().includes(".")) {
+      path += "/";
+    } else if (!path.endsWith("/")) {
+      path = path.substring(0, path.lastIndexOf("/") + 1);
+    }
+    return `${url.origin}${path}`;
   }
 
   function ensureWorker() {

@@ -31,7 +31,11 @@ jobs:
           python3 -c "
           with open('templates/index.html', 'r', encoding='utf-8') as f:
               html = f.read()
-          html = html.replace(\"{{ url_for('static', filename='css/style.css') }}\", 'static/css/style.css')
+          with open('static/css/style.css', 'r', encoding='utf-8') as f:
+              css = f.read()
+          link_tag = '<link rel=\"stylesheet\" href=\"{{ url_for(\'static\', filename=\'css/style.css\') }}\" />'
+          assert link_tag in html, 'Stylesheet link tag not found in templates/index.html'
+          html = html.replace(link_tag, f'<style>\n{css}\n</style>')
           html = html.replace(\"{{ url_for('static', filename='js/game.js') }}\", 'static/js/game.js')
           with open('_site/index.html', 'w', encoding='utf-8') as f:
               f.write(html)
