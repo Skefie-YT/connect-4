@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect 4 — Grandmaster AI</title>
+  <meta name="description" content="Play Connect 4 against a nearly unbeatable Python and Flask bitboard AI with alpha-beta pruning and transposition tables." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-marks" aria-hidden="true">
+          <span class="mini-disc red"></span>
+          <span class="mini-disc yellow"></span>
+        </div>
+        <div>
+          <h1>Connect 4</h1>
+          <p class="subtitle">Bitboard Alpha-Beta Engine</p>
+        </div>
+      </div>
+
+      <div class="controls-bar" role="group" aria-label="Game settings">
+        <label class="select-wrap" for="difficulty-select">
+          <span class="control-label">AI Level</span>
+          <select id="difficulty-select" aria-label="AI Difficulty">
+            <option value="unbeatable" selected>Unbeatable</option>
+            <option value="hard">Master</option>
+            <option value="casual">Casual</option>
+          </select>
+        </label>
+
+        <label class="select-wrap" for="side-select">
+          <span class="control-label">Play As</span>
+          <select id="side-select" aria-label="Choose your color">
+            <option value="1" selected>Red (1st)</option>
+            <option value="2">Yellow (2nd)</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <section class="status-strip" aria-live="polite">
+      <div class="turn-pill" id="turn-indicator">
+        <span class="turn-dot red" id="turn-dot"></span>
+        <span id="status-text">Your turn — drop a disc</span>
+      </div>
+      <div class="engine-telemetry" id="engine-telemetry" title="Last AI search statistics">
+        Ready
+      </div>
+    </section>
+
+    <section class="board-stage" aria-label="Connect 4 Game Board">
+      <div class="preview-rail" id="preview-rail" aria-hidden="true">
+        <div class="preview-slot" data-col="0"><div class="preview-disc"></div></div>
+        <div class="preview-slot" data-col="1"><div class="preview-disc"></div></div>
+        <div class="preview-slot" data-col="2"><div class="preview-disc"></div></div>
+        <div class="preview-slot" data-col="3"><div class="preview-disc"></div></div>
+        <div class="preview-slot" data-col="4"><div class="preview-disc"></div></div>
+        <div class="preview-slot" data-col="5"><div class="preview-disc"></div></div>
+        <div class="preview-slot" data-col="6"><div class="preview-disc"></div></div>
+      </div>
+
+      <div class="board-frame">
+        <div class="board-grid" id="board-grid" role="grid" aria-label="6 by 7 Connect 4 grid">
+          <!-- Cells populated by game.js -->
+        </div>
+        <div class="board-feet" aria-hidden="true">
+          <div class="foot left"></div>
+          <div class="foot right"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bottom-bar">
+      <div class="scoreboard" aria-label="Scoreboard">
+        <div class="score-item">
+          <span class="score-label" id="human-score-label">You (Red)</span>
+          <span class="score-value" id="score-human">0</span>
+        </div>
+        <div class="score-divider"></div>
+        <div class="score-item">
+          <span class="score-label">Draws</span>
+          <span class="score-value" id="score-draws">0</span>
+        </div>
+        <div class="score-divider"></div>
+        <div class="score-item">
+          <span class="score-label" id="ai-score-label">AI (Yellow)</span>
+          <span class="score-value" id="score-ai">0</span>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" id="undo-btn" class="btn btn-secondary" disabled>
+          Undo
+        </button>
+        <button type="button" id="new-game-btn" class="btn btn-primary">
+          New Game
+        </button>
+      </div>
+    </footer>
+
+    <p class="keyboard-hint">
+      Tip: Use keys <kbd>1</kbd>–<kbd>7</kbd> or <kbd>←</kbd><kbd>→</kbd> + <kbd>Enter</kbd> to play
+    </p>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>
